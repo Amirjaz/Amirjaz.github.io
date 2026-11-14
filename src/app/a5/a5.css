@@ -1,0 +1,1087 @@
+/* A5 "Smooth operator". Every rule is scoped under .a5-root (or :has(.a5-root)). */
+
+html:has(.a5-root) {
+  scroll-behavior: auto; /* Lenis drives scrolling here */
+}
+body:has(.a5-root) {
+  background: #141413;
+}
+
+.a5-root {
+  --ink: #141413;
+  --ink-2: #1c1c1a;
+  --paper: #f3f0e9;
+  --paper-2: #e7e3d9;
+  --on-ink: #f3f0e9;
+  --on-ink-muted: #a19e96;
+  --on-paper: #141413;
+  --on-paper-muted: #6b6861;
+  --line-ink: rgba(243, 240, 233, 0.18);
+  --line-paper: rgba(20, 20, 19, 0.16);
+  --accent: #d43c12;
+  --pad: clamp(1rem, 5vw, 5rem);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--on-paper);
+  font-family: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.a5-root ::selection {
+  background: var(--accent);
+  color: #fff;
+}
+.a5-root :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.a5-root .a5-fa {
+  font-family: "Vazirmatn Variable", Tahoma, sans-serif;
+}
+.a5-root .a5-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.a5-root .a5-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--on-paper-muted);
+}
+.a5-root .a5-dark .a5-label {
+  color: var(--on-ink-muted);
+}
+
+/* ---------- Preloader ---------- */
+.a5-root .a5-preloader {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  place-items: center;
+  background: var(--ink);
+  color: var(--on-ink);
+  /* If the scripts never arrive, get out of the way on our own. */
+  animation: a5-pre-failsafe 0s linear 7s forwards;
+}
+html.js .a5-root .a5-preloader {
+  display: grid;
+}
+@keyframes a5-pre-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+.a5-root .a5-preloader-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 300px);
+  fill: var(--ink);
+  pointer-events: none;
+}
+.a5-root .a5-preloader-words {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.a5-root .a5-preloader-words > span {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  visibility: hidden;
+}
+.a5-root .a5-preloader-words > span:first-child {
+  visibility: visible;
+}
+.a5-root .a5-preloader-words > span::before {
+  content: "";
+  width: 0.24em;
+  height: 0.24em;
+  border-radius: 50%;
+  background: var(--on-ink);
+}
+
+/* ---------- Hero ---------- */
+.a5-root .a5-dark {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.a5-root .a5-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: hidden;
+}
+.a5-root .a5-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem var(--pad);
+  font-size: 0.975rem;
+}
+.a5-root .a5-nav ul {
+  display: flex;
+  gap: clamp(0.25rem, 1.5vw, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.a5-root .a5-link {
+  position: relative;
+  display: inline-block;
+  padding: 0.6rem 0.75rem;
+  color: inherit;
+  text-decoration: none;
+  will-change: transform;
+}
+.a5-root .a5-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.1rem;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: scale(0);
+  transition: transform 0.35s var(--ease);
+}
+.a5-root .a5-link:hover::after,
+.a5-root .a5-link:focus-visible::after {
+  transform: scale(1);
+}
+.a5-root .a5-brand {
+  padding-left: 0;
+  font-weight: 500;
+}
+
+.a5-root .a5-hero-mid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem var(--pad);
+}
+.a5-root .a5-location {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-left: calc(var(--pad) * -1);
+  padding: 0.7rem 0.75rem 0.7rem var(--pad);
+  border-radius: 0 999px 999px 0;
+  background: var(--ink-2);
+  border: 1px solid var(--line-ink);
+  border-left: 0;
+  font-size: 0.975rem;
+  line-height: 1.3;
+}
+.a5-root .a5-location > span:last-child {
+  color: var(--on-ink-muted);
+  display: block;
+}
+.a5-root .a5-location .a5-globe {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+}
+.a5-root .a5-globe svg {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+.a5-root .a5-globe ellipse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: a5-meridian 3.6s ease-in-out infinite alternate;
+}
+.a5-root .a5-globe ellipse + ellipse {
+  animation-direction: alternate-reverse;
+}
+@keyframes a5-meridian {
+  from {
+    transform: scaleX(0.08);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.a5-root .a5-hero-role {
+  max-width: 30rem;
+  padding-right: clamp(0rem, 4vw, 5rem);
+}
+.a5-root .a5-hero-role svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: clamp(1.5rem, 5vh, 4rem);
+}
+.a5-root .a5-hero-role p {
+  margin: 0;
+}
+.a5-root .a5-hero-role .a5-role {
+  font-size: clamp(1.75rem, 3.3vw, 3.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.a5-root .a5-hero-role .a5-pitch {
+  margin-top: 1.1rem;
+  color: var(--on-ink-muted);
+  font-size: 1.125rem;
+}
+
+.a5-root .a5-marquee {
+  overflow: hidden;
+  padding-bottom: clamp(0.5rem, 2vh, 1.5rem);
+  user-select: none;
+}
+.a5-root .a5-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.a5-root .a5-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  font-size: clamp(4.5rem, 15.5vw, 15rem);
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+.a5-root .a5-marquee-item i {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  margin: 0 0.32em;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Compact nav, shown by the script once the hero is out of view */
+.a5-root .a5-dock {
+  position: fixed;
+  top: 1rem;
+  right: var(--pad);
+  z-index: 50;
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.3rem;
+  border: 1px solid var(--line-ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 0.9rem;
+  visibility: hidden;
+  opacity: 0;
+  will-change: transform;
+}
+.a5-root .a5-dock a {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.25s ease;
+}
+.a5-root .a5-dock a:hover,
+.a5-root .a5-dock a:focus-visible {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- Section edge: a rounded lip that flattens while you scroll ---------- */
+.a5-root .a5-curve {
+  position: relative;
+  height: clamp(3rem, 12vh, 8rem);
+  overflow: hidden;
+  transform-origin: 50% 0;
+  will-change: transform;
+  pointer-events: none;
+}
+.a5-root .a5-curve i {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 150%;
+  height: 750%;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+}
+.a5-root .a5-curve-paper i {
+  background: var(--paper);
+}
+
+/* ---------- Light body ---------- */
+.a5-root .a5-section {
+  padding: clamp(3.5rem, 9vw, 8rem) var(--pad);
+}
+.a5-root .a5-intro {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2.5rem clamp(1.5rem, 4vw, 4rem);
+  padding-top: clamp(2rem, 5vw, 4rem);
+}
+.a5-root .a5-intro-lead {
+  grid-column: span 7;
+  margin: 0;
+  font-size: clamp(1.5rem, 2.55vw, 2.5rem);
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+}
+.a5-root .a5-intro-side {
+  grid-column: 9 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+.a5-root .a5-intro-side p {
+  margin: 0;
+  max-width: 24rem;
+  color: var(--on-paper-muted);
+  font-size: 1.0625rem;
+}
+
+/* Round button with a fill that rises from below */
+.a5-root .a5-round {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--on-ink);
+  text-decoration: none;
+  font-size: 1rem;
+  will-change: transform;
+}
+.a5-root .a5-round-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.a5-root .a5-round::before {
+  content: "";
+  position: absolute;
+  inset: -15%;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform 0.55s var(--ease);
+}
+.a5-root .a5-round-accent::before {
+  background: var(--paper);
+}
+.a5-root .a5-round:hover::before,
+.a5-root .a5-round:focus-visible::before {
+  transform: translateY(0);
+}
+.a5-root .a5-round span {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+.a5-root .a5-round-accent:hover span,
+.a5-root .a5-round-accent:focus-visible span {
+  color: var(--ink);
+}
+
+.a5-root .a5-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem clamp(1.5rem, 3vw, 3rem);
+  margin: clamp(4rem, 9vw, 8rem) 0 0;
+}
+.a5-root .a5-facts > div {
+  border-top: 1px solid var(--line-paper);
+  padding-top: 1.1rem;
+}
+.a5-root .a5-facts dd {
+  margin: 0;
+}
+.a5-root .a5-facts b {
+  display: block;
+  font-size: clamp(2.5rem, 4.4vw, 4.25rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.a5-root .a5-facts span {
+  display: block;
+  margin-top: 0.75rem;
+  max-width: 15rem;
+  color: var(--on-paper-muted);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+/* ---------- Work index ---------- */
+.a5-root .a5-work {
+  padding-top: clamp(1rem, 3vw, 3rem);
+}
+.a5-root .a5-work-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 1.5rem;
+}
+
+/* Floating preview that follows the cursor over the work index */
+
+/* Media panels, shared by the preview and the case blocks */
+.a5-root .a5-panel {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.a5-root .a5-panel-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.a5-root .a5-panel-contain {
+  background: var(--paper-2);
+}
+.a5-root .a5-panel-contain img {
+  width: auto;
+  height: 84%;
+  max-width: 84%;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--line-paper);
+}
+.a5-root .a5-singo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  padding: 8%;
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.a5-root .a5-singo-bars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.6%;
+  width: 78%;
+  height: 34%;
+}
+.a5-root .a5-singo-bars i {
+  flex: 1;
+  max-width: 0.6rem;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--on-ink);
+  transform: scaleY(0.2);
+  animation: a5-bar 1.5s ease-in-out infinite alternate;
+  animation-delay: calc(var(--n) * -0.23s);
+}
+.a5-root .a5-singo-bars i:nth-child(3n) {
+  background: var(--accent);
+}
+@keyframes a5-bar {
+  0% {
+    transform: scaleY(0.14);
+  }
+  45% {
+    transform: scaleY(0.92);
+  }
+  100% {
+    transform: scaleY(0.36);
+  }
+}
+.a5-root .a5-singo ol {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+}
+.a5-root .a5-singo li {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--line-ink);
+  border-radius: 4px;
+  color: var(--on-ink-muted);
+  white-space: nowrap;
+}
+.a5-root .a5-singo li[data-owner] {
+  border-color: var(--on-ink);
+  background: var(--on-ink);
+  color: var(--ink);
+}
+
+/* ---------- Case blocks ---------- */
+.a5-root .a5-cases {
+  display: grid;
+  gap: clamp(4rem, 10vw, 9rem);
+  padding-top: clamp(4rem, 9vw, 8rem);
+}
+.a5-root .a5-case {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+  scroll-margin-top: 3rem;
+}
+.a5-root .a5-case-media {
+  grid-column: span 7;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--paper-2);
+}
+.a5-root .a5-case-media .a5-panel {
+  will-change: transform;
+}
+.a5-root .a5-case-text {
+  grid-column: span 5;
+}
+.a5-root .a5-case:nth-child(even) .a5-case-media {
+  order: 2;
+}
+.a5-root .a5-case-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+}
+.a5-root .a5-badge {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--line-paper);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.a5-root .a5-case h3 {
+  margin: 0.9rem 0 0;
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+.a5-root .a5-case-summary {
+  margin: 1.1rem 0 0;
+  font-size: 1.0625rem;
+}
+.a5-root .a5-points {
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-paper);
+  color: var(--on-paper-muted);
+  font-size: 0.975rem;
+}
+.a5-root .a5-points li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line-paper);
+}
+.a5-root .a5-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--on-paper-muted);
+}
+.a5-root .a5-stack li {
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--line-paper);
+  border-radius: 4px;
+}
+.a5-root .a5-case-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+}
+.a5-root .a5-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.8rem 1.3rem;
+  overflow: hidden;
+  border: 1px solid var(--line-paper);
+  border-radius: 999px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.975rem;
+  will-change: transform;
+  transition: border-color 0.3s ease;
+}
+.a5-root .a5-dark .a5-pill {
+  border-color: var(--line-ink);
+}
+.a5-root .a5-pill::before {
+  content: "";
+  position: absolute;
+  inset: -40% -5%;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease);
+}
+.a5-root .a5-pill:hover::before,
+.a5-root .a5-pill:focus-visible::before {
+  transform: translateY(0);
+}
+.a5-root .a5-pill:hover,
+.a5-root .a5-pill:focus-visible {
+  border-color: var(--accent);
+}
+.a5-root .a5-pill > * {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+.a5-root .a5-pill:hover > *,
+.a5-root .a5-pill:focus-visible > * {
+  color: #fff;
+}
+.a5-root .a5-pill svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+/* ---------- Experience, education, skills ---------- */
+.a5-root .a5-split {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2rem clamp(1.5rem, 4vw, 4rem);
+  padding-top: clamp(3rem, 7vw, 6rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+  border-top: 1px solid var(--line-paper);
+  margin: 0 var(--pad);
+  padding-left: 0;
+  padding-right: 0;
+}
+.a5-root .a5-split > h2 {
+  grid-column: span 4;
+  position: sticky;
+  top: 3rem;
+  align-self: start;
+  margin: 0;
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+.a5-root .a5-split > div,
+.a5-root .a5-split > ol,
+.a5-root .a5-split > dl {
+  grid-column: 5 / span 8;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.a5-root .a5-role-row {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 0.5rem 2rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--line-paper);
+}
+.a5-root .a5-role-row:first-child {
+  border-top: 0;
+  padding-top: 0.35rem;
+}
+.a5-root .a5-role-row time,
+.a5-root .a5-period {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: var(--on-paper-muted);
+  padding-top: 0.3rem;
+}
+.a5-root .a5-role-row h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.a5-root .a5-role-row h3 span {
+  font-weight: 400;
+  color: var(--on-paper-muted);
+}
+.a5-root .a5-role-row ul {
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--on-paper-muted);
+  font-size: 0.975rem;
+  max-width: 44rem;
+}
+.a5-root .a5-role-row li {
+  position: relative;
+  padding-left: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+.a5-root .a5-role-row li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.a5-root .a5-edu h3 {
+  margin: 0.35rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.a5-root .a5-edu p {
+  margin: 0.4rem 0 0;
+  color: var(--on-paper-muted);
+}
+.a5-root .a5-skills {
+  margin: 2.25rem 0 0;
+}
+.a5-root .a5-skills > div {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 0 2rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line-paper);
+}
+.a5-root .a5-skills dt,
+.a5-root .a5-skills dd {
+  margin: 0;
+}
+.a5-root .a5-skills dt {
+  color: var(--on-paper-muted);
+  font-size: 0.9375rem;
+}
+
+/* ---------- Footer ---------- */
+.a5-root .a5-footer {
+  position: relative;
+  overflow: hidden;
+}
+.a5-root .a5-footer-inner {
+  padding: clamp(2rem, 6vw, 5rem) var(--pad) 0;
+  will-change: transform;
+}
+.a5-root .a5-footer h2 {
+  margin: 1.25rem 0 0;
+  font-size: clamp(2.75rem, 8.6vw, 8.25rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.a5-root .a5-footer-line {
+  position: relative;
+  margin-top: clamp(4.5rem, 9vw, 8rem);
+  border-top: 1px solid var(--line-ink);
+}
+.a5-root .a5-footer-cta {
+  position: absolute;
+  right: clamp(1rem, 12vw, 14rem);
+  top: 0;
+  margin-top: -5.5rem;
+  will-change: transform;
+}
+.a5-root .a5-footer-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: clamp(5.5rem, 9vw, 8rem) 0 0;
+}
+.a5-root .a5-footer-pills .a5-pill {
+  padding: 1.35rem 2rem;
+  font-size: 1.0625rem;
+}
+.a5-root .a5-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem 3rem;
+  padding: clamp(3rem, 7vw, 6rem) 0 5.5rem;
+  font-size: 0.975rem;
+}
+.a5-root .a5-footer-bottom > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3rem;
+}
+.a5-root .a5-footer-bottom p {
+  margin: 0.5rem 0 0;
+}
+.a5-root .a5-footer-bottom ul {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0 0 0 -0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Tablet and phone ---------- */
+@media (max-width: 900px) {
+  .a5-root .a5-intro-lead,
+  .a5-root .a5-intro-side,
+  .a5-root .a5-case-media,
+  .a5-root .a5-case-text,
+  .a5-root .a5-split > h2,
+  .a5-root .a5-split > div,
+  .a5-root .a5-split > ol,
+  .a5-root .a5-split > dl {
+    grid-column: 1 / -1;
+  }
+  .a5-root .a5-case:nth-child(even) .a5-case-media {
+    order: 0;
+  }
+  .a5-root .a5-intro-side {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .a5-root .a5-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .a5-root .a5-nav {
+    padding-top: 1rem;
+  }
+  .a5-root .a5-nav .a5-link {
+    padding: 0.6rem 0.45rem;
+  }
+  .a5-root .a5-hero-mid {
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: 2.5rem;
+  }
+  .a5-root .a5-hero-role {
+    order: -1;
+  }
+  .a5-root .a5-hero-role svg {
+    margin-bottom: 1.5rem;
+  }
+  .a5-root .a5-round {
+    width: 9rem;
+    height: 9rem;
+  }
+  .a5-root .a5-role-row,
+  .a5-root .a5-skills > div {
+    grid-template-columns: 1fr;
+  }
+  .a5-root .a5-split > h2 {
+    position: static;
+  }
+  .a5-root .a5-footer-cta {
+    right: 1rem;
+    margin-top: -4.5rem;
+  }
+  .a5-root .a5-footer-pills .a5-pill {
+    padding: 1.1rem 1.4rem;
+    font-size: 0.975rem;
+  }
+  .a5-root .a5-singo ol {
+    font-size: 0.66rem;
+  }
+  .a5-root .a5-case-media:has(.a5-singo) {
+    aspect-ratio: auto;
+  }
+  .a5-root .a5-case-media .a5-singo {
+    padding: 2.25rem 1rem;
+  }
+  .a5-root .a5-case-media .a5-singo-bars {
+    flex: none;
+    width: 86%;
+    height: 5.5rem;
+  }
+}
+
+/* ---------- Reduced motion: no preloader, nothing drifts ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.js .a5-root .a5-preloader,
+  .a5-root .a5-preloader {
+    display: none;
+  }
+  .a5-root .a5-globe ellipse,
+  .a5-root .a5-singo-bars i {
+    animation: none;
+  }
+  .a5-root .a5-globe ellipse + ellipse {
+    transform: scaleX(0.45);
+  }
+  .a5-root .a5-singo-bars i {
+    transform: scaleY(var(--h, 0.5));
+  }
+  .a5-root .a5-curve {
+    display: none;
+  }
+  .a5-root *,
+  .a5-root *::before,
+  .a5-root *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Two product shots side by side: the first leads, the second supports. */
+.a5-root .a5-panel-duo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 4%, 2.5rem);
+  padding: 6% 7%;
+  background: var(--paper-2);
+}
+.a5-root .a5-panel-duo img {
+  width: auto;
+  min-width: 0;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--line-paper);
+}
+.a5-root .a5-panel-duo img:first-child {
+  height: 100%;
+}
+.a5-root .a5-panel-duo img:last-child {
+  height: 66%;
+}
+
+/* A smaller, related project inside a case block. */
+.a5-root .a5-also {
+  margin-top: 2.2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line-paper);
+}
+.a5-root .a5-also h4 {
+  margin: 0.5rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+.a5-root .a5-also p {
+  margin: 0.6rem 0 0;
+  color: var(--on-paper-muted);
+  font-size: 0.975rem;
+}
+.a5-root .a5-also .a5-case-links {
+  margin-top: 1.1rem;
+}
+
+/* A terminal session set in type, for command-line projects. */
+.a5-root .a5-term {
+  place-items: stretch;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(0.72rem, 1.02vw, 0.95rem);
+  line-height: 1.5;
+}
+.a5-root .a5-term-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5em;
+  min-width: 0;
+  padding: 7% 8%;
+}
+.a5-root .a5-term p {
+  margin: 0;
+}
+.a5-root .a5-term-cmd b {
+  margin-inline-end: 0.75em;
+  font-weight: 400;
+  color: var(--accent);
+}
+.a5-root .a5-term-dim {
+  color: var(--on-ink-muted);
+}
+.a5-root .a5-term p > .a5-term-dim {
+  display: block;
+}
+.a5-root .a5-term-cmd + .a5-term-dim {
+  margin-top: -1.1em;
+}
+.a5-root .a5-term ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-ink);
+}
+.a5-root .a5-term li {
+  display: grid;
+  grid-template-columns: 6.5em 1.25em 6.5em minmax(0, 1fr);
+  align-items: center;
+  gap: 0 1em;
+  padding: 0.75em 0;
+  border-bottom: 1px solid var(--line-ink);
+}
+.a5-root .a5-term s {
+  color: var(--on-ink-muted);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+}
+.a5-root .a5-term li svg {
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--on-ink-muted);
+}
+.a5-root .a5-term em {
+  font-style: normal;
+  text-align: end;
+  color: var(--on-ink-muted);
+}
+@media (max-width: 640px) {
+  .a5-root .a5-case-media:has(.a5-term) {
+    aspect-ratio: auto;
+  }
+  .a5-root .a5-term {
+    font-size: 0.78rem;
+  }
+  .a5-root .a5-term-body {
+    padding: 1.75rem 1.25rem;
+  }
+  .a5-root .a5-term li {
+    grid-template-columns: auto 1.25em minmax(0, 1fr);
+  }
+  .a5-root .a5-term em {
+    grid-column: 1 / -1;
+    margin-top: 0.15em;
+    text-align: start;
+    font-size: 0.92em;
+  }
+}

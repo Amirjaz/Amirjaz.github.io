@@ -8,6 +8,11 @@ export type Visual =
   | { kind: "image"; src: string; alt: string; width: number; height: number }
   | { kind: "pipeline"; caption: string; steps: { label: string; owner?: boolean }[] }
   | {
+      /** Phone-sized screenshots shown side by side, in the order a visitor meets them. */
+      kind: "phones";
+      shots: { src: string; alt: string; width: number; height: number }[];
+    }
+  | {
       /** A short terminal session, set in type instead of shown as a screenshot. */
       kind: "terminal";
       alt: string;
@@ -83,6 +88,44 @@ export const projects: Project[] = [
       alt: "Letterboxd Toolkit store image: the A Life in Film recap, with a marquee title and a ticket showing 1,124 films, 2,031 hours and 584 directors",
       width: 1280,
       height: 800,
+    },
+  },
+  {
+    name: "Café Menu",
+    kicker: "Ordering web app, frontend and API",
+    badge: { label: "Live demo" },
+    summary:
+      "A café menu that takes the order as well. Customers browse, fill a cart, and pay online or at the counter with an order code, and staff hand paid orders over from a screen of their own.",
+    points: [
+      "The hero is a three.js scene written by hand, with no model file: a low-poly cup slides in, a stream pours and fills it, it steams, it is drunk down, and the pour starts over. It loads in its own chunk, runs only while it is on screen, and sits still as a full cup under reduced motion.",
+      "Built for the thumb: on a phone, cards swipe right to add and left to remove, an item's sheet pulls down to close, and the featured row pans as the page scrolls.",
+      "The Django API prices every order from the menu, never from the request, and verifies each payment with ZarinPal. A scheduled job settles the payments whose customer never came back.",
+    ],
+    stack: ["React", "TypeScript", "three.js", "Framer Motion", "Django", "PostgreSQL", "Docker"],
+    // The repository is private. The demo is the frontend alone, with the starter menu built in.
+    links: [{ label: "Live demo", href: "https://amirjaz.github.io/cafe-menu-demo/" }],
+    visual: {
+      kind: "phones",
+      shots: [
+        {
+          src: "/images/cafe-menu-hero.webp",
+          alt: "Café Menu on a phone, opening screen: a low-poly coffee cup on a navy and cream checkerboard, with a stream of coffee pouring into it",
+          width: 600,
+          height: 1298,
+        },
+        {
+          src: "/images/cafe-menu-list.webp",
+          alt: "The menu list: a pinned row of categories, cards for coffee and tea with photos, ingredients and prices, and a bar at the bottom holding two items in the cart",
+          width: 600,
+          height: 1298,
+        },
+        {
+          src: "/images/cafe-menu-order.webp",
+          alt: "The order code: a QR code to show at the counter, for two items at 280,000 toman",
+          width: 600,
+          height: 1298,
+        },
+      ],
     },
   },
   {

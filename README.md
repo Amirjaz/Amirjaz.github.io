@@ -37,6 +37,7 @@ To add a project, add one entry to `projects`. They are shown in the order they 
 Each needs a `visual`, which decides the picture beside the text:
 
 - `image`: one picture. Put a WebP around 1280px wide in `public/images/`.
+- `phones`: up to three phone-sized screenshots in a row, each a WebP 600px wide.
 - `terminal`: a short command-line session set in type, for tools with no interface.
 - `pipeline`: a row of labelled steps.
 

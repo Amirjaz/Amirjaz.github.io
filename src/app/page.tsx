@@ -105,6 +105,23 @@ function ProjectPanel({ project, eager = false }: { project: Project; eager?: bo
           </div>
         );
       }
+      if (visual.kind === "phones") {
+        return (
+          <div className="a5-panel a5-phones">
+            {visual.shots.map((shot) => (
+              <img
+                key={shot.src}
+                src={shot.src}
+                alt={shot.alt}
+                width={shot.width}
+                height={shot.height}
+                loading={loading}
+                decoding="async"
+              />
+            ))}
+          </div>
+        );
+      }
       if (visual.kind === "image") {
         return (
           <div className="a5-panel a5-panel-contain">

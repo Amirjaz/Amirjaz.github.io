@@ -184,6 +184,19 @@ export function Motion() {
         );
       });
 
+      // Phone screenshots drift past each other, so the row reads as three layers.
+      const phoneDrift = [4, -3, 5.5];
+      $$(".a5-phones").forEach((row) => {
+        Array.from(row.children).forEach((shot, i) => {
+          const by = phoneDrift[i % phoneDrift.length];
+          gsap.fromTo(
+            shot,
+            { yPercent: by },
+            { yPercent: -by, ease: "none", scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: true } },
+          );
+        });
+      });
+
       // The round "Selected work" button trails the text beside it.
       const drifter = $("[data-a5-drift]");
       if (drifter && fine) {

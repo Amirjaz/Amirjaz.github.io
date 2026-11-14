@@ -2,11 +2,10 @@
 
 export type Link = { label: string; href: string };
 
-export type Badge = { label: string; tone: "green" | "blue" | "yellow" | "red" };
+export type Badge = { label: string };
 
 export type Visual =
-  | { kind: "image"; src: string; alt: string; width: number; height: number; frame?: "dark" | "light" }
-  | { kind: "bidi" }
+  | { kind: "image"; src: string; alt: string; width: number; height: number }
   | { kind: "pipeline"; caption: string; steps: { label: string; owner?: boolean }[] }
   | {
       /** A short terminal session, set in type instead of shown as a screenshot. */
@@ -30,8 +29,6 @@ export type Project = {
   visual: Visual;
   /** A related, smaller project shown inside the same section. */
   also?: { name: string; summary: string; links: Link[] };
-  /** full = whole row, wide = 7 of 12 columns, narrow = 5 of 12 */
-  size: "full" | "wide" | "narrow";
 };
 
 export type Role = {
@@ -70,7 +67,7 @@ export const projects: Project[] = [
   {
     name: "Letterboxd Toolkit",
     kicker: "Browser extension for Chrome and Firefox",
-    badge: { label: "300+ installs", tone: "green" },
+    badge: { label: "300+ installs" },
     summary:
       "Native-looking tools for Letterboxd, each switched on separately: a recap of your whole film diary, how the people you follow rated a film, progress rings on lists, and outside scores on film pages.",
     points: [
@@ -86,14 +83,12 @@ export const projects: Project[] = [
       alt: "Letterboxd Toolkit store image: the A Life in Film recap, with a marquee title and a ticket showing 1,124 films, 2,031 hours and 584 directors",
       width: 1280,
       height: 800,
-      frame: "dark",
     },
-    size: "full",
   },
   {
     name: "rtl-doctor",
     kicker: "ESLint plugin and command-line tool",
-    badge: { label: "On npm", tone: "green" },
+    badge: { label: "On npm" },
     summary:
       "Finds right-to-left bugs in React, Tailwind and CSS code, and fixes the ones that have a single correct answer, without changing how the page looks today.",
     points: [
@@ -119,12 +114,11 @@ export const projects: Project[] = [
       result: "Fixed 18 problems in 8 files.",
       note: "0 of 6,058 elements moved.",
     },
-    size: "full",
   },
   {
     name: "gsc-pulse",
     kicker: "Python command-line tool",
-    badge: { label: "On PyPI", tone: "blue" },
+    badge: { label: "On PyPI" },
     summary:
       "Turns Google Search Console exports into one HTML report: what grew, what dropped and why, and the five things to do next.",
     points: [
@@ -143,14 +137,12 @@ export const projects: Project[] = [
       alt: "The top of a gsc-pulse report for a fictional demo site. The headline reads: Real clicks fell 2.5%. A bot burst added 1,584 clicks that made it look like +28.6%.",
       width: 1600,
       height: 1000,
-      frame: "light",
     },
-    size: "full",
   },
   {
     name: "Shamsi-Calendar",
     kicker: "Open-source React libraries",
-    badge: { label: "On npm", tone: "yellow" },
+    badge: { label: "On npm" },
     summary:
       "A Jalali date picker for React that matches shadcn/ui. It reads your theme's CSS variables, so colours and dark mode work with no setup.",
     points: [
@@ -168,7 +160,6 @@ export const projects: Project[] = [
       alt: "Shamsi-Calendar date picker open on Farvardin 1405, with Nowruz holidays marked in red and the 13th selected",
       width: 344,
       height: 462,
-      frame: "light",
     },
     also: {
       name: "persian-ui",
@@ -176,7 +167,6 @@ export const projects: Project[] = [
         "A companion set of React components and utilities for Persian products: inputs for national ID, mobile, Sheba and prices, digit and date helpers, and validators with real checksums.",
       links: [{ label: "persian-ui on GitHub", href: "https://github.com/Amirjaz/persian-ui" }],
     },
-    size: "full",
   },
 ];
 
@@ -185,7 +175,7 @@ export const shelved: Project[] = [
   {
     name: "SinGo",
     kicker: "Persian karaoke app, built by two people",
-    badge: { label: "Early stage", tone: "yellow" },
+    badge: { label: "Early stage" },
     summary:
       "Pick a song, sing over the instrumental with synced lyrics, then record and share your take. I own the native Android recorder, the backend and the release builds; my teammate owns the player and the catalogue.",
     points: [
@@ -207,7 +197,6 @@ export const shelved: Project[] = [
         { label: "Mix + share" },
       ],
     },
-    size: "full",
   },
 ];
 

@@ -1,4 +1,6 @@
-/* A5 "Smooth operator". Every rule is scoped under .a5-root (or :has(.a5-root)). */
+/* The page's design, "Smooth operator": a dark ink hero, paper sections, one accent.
+   It was candidate A5 of four, which is where the a5- prefix comes from.
+   Every rule is scoped under .a5-root (or :has(.a5-root)). */
 
 html:has(.a5-root) {
   scroll-behavior: auto; /* Lenis drives scrolling here */

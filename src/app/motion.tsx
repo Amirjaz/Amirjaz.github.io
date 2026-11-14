@@ -7,7 +7,7 @@ import { SplitText } from "gsap/SplitText";
 import Lenis from "lenis";
 
 /**
- * All motion for the A5 design. The page itself is plain server-rendered HTML; this
+ * All motion for the page. The page itself is plain server-rendered HTML; this
  * component only adds behaviour, so with scripts off (or motion reduced) everything
  * is simply there.
  */

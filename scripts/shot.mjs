@@ -1,17 +1,21 @@
 // Screenshots a route of the running dev server at several scroll positions, using the
 // installed Microsoft Edge. Prints console errors so broken pages are caught early.
 //
-//   node scripts/shot.mjs a1 <out-dir> [--steps=8] [--at=0,900,2400] [--mobile]
-//                                         [--reduced-motion] [--light] [--hover=<css selector>]
-//                                         [--move=x,y] [--wait=900]
+//   node scripts/shot.mjs home <out-dir> [--steps=8] [--at=0,900,2400] [--mobile]
+//                                           [--reduced-motion] [--light] [--hover=<css selector>]
+//                                           [--move=x,y] [--wait=900]
+//
+// Set BASE to point it somewhere else, such as a served static build:
+//   BASE=http://localhost:4321 node scripts/shot.mjs home shots
 import { chromium } from "playwright-core";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 
-const [routeArg = "", out = "shots", ...flags] = process.argv.slice(2);
-// Pass the route without slashes ("a1", or "" for the home page): Git Bash rewrites "/a1/" into a Windows path.
+const [routeArg = "home", out = "shots", ...flags] = process.argv.slice(2);
+// "home" is the page at /. Any other route is passed without slashes ("notes" for /notes/),
+// because Git Bash rewrites a leading slash into a Windows path.
 const slug = routeArg.replace(/^.*[\/]Git[\/]?/, "").replace(/^[\/]+|[\/]+$/g, "");
-const route = slug ? `/${slug}/` : "/";
+const route = slug && slug !== "home" ? `/${slug}/` : "/";
 const flag = (name) => flags.find((f) => f === `--${name}` || f.startsWith(`--${name}=`));
 const value = (name, fallback) => (flag(name)?.includes("=") ? flag(name).split("=").slice(1).join("=") : fallback);
 

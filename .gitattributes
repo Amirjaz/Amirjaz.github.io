@@ -1,0 +1,5 @@
+# Keep line endings the same on Windows and on the Linux runner that builds the site.
+* text=auto eol=lf
+*.webp binary
+*.png binary
+*.jpg binary

@@ -1,13 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import "@fontsource-variable/newsreader";
 import "@fontsource-variable/vazirmatn";
 import "./globals.css";
 import { site } from "@/content/site";
-
-// Fades `.reveal` blocks in as they scroll into view. Inline, so it runs before React loads.
-const revealScript = `(function(){var els=document.querySelectorAll('.reveal');if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('is-visible')});return}var io=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('is-visible');io.unobserve(en.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:0.08});els.forEach(function(e){io.observe(e)})})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -30,12 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#141413" },
-  ],
-};
+// The page opens on the dark hero whatever the visitor's system theme is.
+export const viewport: Viewport = { themeColor: "#141413" };
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -54,17 +46,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Lets the scroll-entry styles apply only when JavaScript runs. */}
+        {/* Marks that scripts run, so the preloader only shows when something can remove it. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>
-      <body>
-        {children}
-        <script dangerouslySetInnerHTML={{ __html: revealScript }} />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

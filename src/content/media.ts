@@ -1,16 +1,10 @@
-// Real product images, shared by every design. Files live in public/images.
+// Real product images. Files live in public/images.
 
 export const media = {
-  /** Letterboxd Toolkit store images, 1280x800. The first is the main one. */
-  letterboxd: [
-    "/images/letterboxd-toolkit.webp",
-    "/images/lb-score.webp",
-    "/images/lb-cast.webp",
-    "/images/lb-passport.webp",
-    "/images/lb-year.webp",
-  ],
-  /** persian-ui docs images: 784x828 (inputs) and 784x1074 (picker), light backgrounds. */
-  persianUi: ["/images/persian-ui-inputs.webp", "/images/persian-ui-picker.webp"],
-  /** Shamsi-Calendar date picker, 344x462, in both themes. */
-  shamsi: { light: "/images/shamsi-calendar.webp", dark: "/images/shamsi-calendar-dark.webp" },
+  /** Letterboxd Toolkit store image, 1280x800. */
+  letterboxd: ["/images/letterboxd-toolkit.webp"],
+  /** persian-ui docs image of the form inputs, 784x828, light background. */
+  persianUi: ["/images/persian-ui-inputs.webp"],
+  /** Shamsi-Calendar date picker, 344x462. */
+  shamsi: { light: "/images/shamsi-calendar.webp" },
 } as const;

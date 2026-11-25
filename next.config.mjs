@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Static HTML in ./out, served by GitHub Pages.
+  // Static HTML in ./out, served by GitHub Pages at amirjaz.ir.
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },

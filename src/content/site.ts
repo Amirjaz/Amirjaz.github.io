@@ -48,7 +48,7 @@ export const site = {
   shortName: "Amir Jazayeri",
   role: "Software engineer",
   location: "Tehran",
-  url: "https://amirjaz.github.io",
+  url: "https://amirjaz.ir",
   email: "amir.jazayeri4@gmail.com",
   github: "https://github.com/Amirjaz",
   linkedin: "https://www.linkedin.com/in/amir-jazayeri613026298",
@@ -103,7 +103,7 @@ export const projects: Project[] = [
     ],
     stack: ["React", "TypeScript", "three.js", "Framer Motion", "Django", "PostgreSQL", "Docker"],
     // The repository is private. The demo is the frontend alone, with the starter menu built in.
-    links: [{ label: "Live demo", href: "https://amirjaz.github.io/cafe-menu-demo/" }],
+    links: [{ label: "Live demo", href: "https://amirjaz.ir/cafe-menu-demo/" }],
     visual: {
       kind: "phones",
       shots: [

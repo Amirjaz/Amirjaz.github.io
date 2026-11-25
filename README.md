@@ -1,7 +1,7 @@
-# amirjaz.github.io
+# amirjaz.ir
 
 Personal site of Amir Mohammad Jazayeri, software engineer in Tehran.
-Its address is **https://amirjaz.github.io**.
+Its address is **https://amirjaz.ir** (https://amirjaz.github.io redirects there).
 
 A single static page built with Next.js 16 (static export), React 19, TypeScript and
 Tailwind CSS v4, with GSAP and Lenis for motion, deployed to GitHub Pages by GitHub Actions.
@@ -74,6 +74,34 @@ BASE=http://localhost:4321 node scripts/shot.mjs home shots/reduced --reduced-mo
 
 Every push to `main` then runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml):
 typecheck, build, publish `./out`.
+
+## Domain
+
+`amirjaz.ir` is registered at IRNIC. Its DNS is hosted on ArvanCloud (free Basic plan), and the
+domain's nameservers at IRNIC are:
+
+```
+b.ns.arvancdn.ir
+r.ns.arvancdn.ir
+```
+
+The records in ArvanCloud, all with the cloud (CDN proxy) **off**, so GitHub can issue the
+HTTPS certificate:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | `@` | `185.199.108.153` |
+| CNAME | `www` | `amirjaz.github.io` |
+
+GitHub Pages lists four A addresses (`185.199.108.153` to `185.199.111.153`); ArvanCloud's free
+plan allows one value per record, and one is enough.
+
+In the repository, **Settings > Pages > Custom domain** is `amirjaz.ir` with **Enforce HTTPS** on.
+A workflow-deployed site needs no `CNAME` file. Setting the custom domain also moves every other
+Pages site on the account under it, so the café menu demo is at `https://amirjaz.ir/cafe-menu-demo/`.
+
+The site's own address lives in `site.url` in [`src/content/site.ts`](src/content/site.ts); the
+canonical link, sitemap, robots.txt and structured data all read it.
 
 ## Design notes
 

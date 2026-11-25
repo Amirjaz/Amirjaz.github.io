@@ -76,7 +76,12 @@ export function Motion() {
       const heroIn = $$("[data-hero-in]");
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      if (pre && getComputedStyle(pre).display !== "none") {
+      const preStyle = pre ? getComputedStyle(pre) : null;
+      if (pre && preStyle && preStyle.display !== "none" && preStyle.visibility === "hidden") {
+        // The scripts came after the CSS failsafe had already put the preloader away
+        // (a slow connection). Playing it now would cover a page that is already showing.
+        gsap.set(pre, { display: "none" });
+      } else if (pre && preStyle && preStyle.display !== "none") {
         const words = $$("[data-word]");
         const path = pre.querySelector("path");
         const w = window.innerWidth;

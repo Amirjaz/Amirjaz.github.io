@@ -91,6 +91,44 @@ export const projects: Project[] = [
     },
   },
   {
+    name: "Shining",
+    kicker: "Android app and its server, built by two people",
+    badge: { label: "Released" },
+    summary:
+      "An Android client for Sharif University's food reservation system: reserve the week's meals, keep each meal's forget code at hand, and hear the moment next week's menus open. It started from the open-source Foodie app; I built the server and the parts of the app that talk to it, and my teammate redesigned the interface.",
+    points: [
+      "A Kotlin server watches every cafeteria, every five minutes while next week's menus are due. When one opens for reservation it sends a single Firebase alert, holding it 20 minutes so days that open together arrive together.",
+      "The university's login now asks for a captcha every time, and the server never tries to read one. It sends an admin alert with a sign-in page, a person types the code, and the session is kept through restarts for about six months.",
+      "A market for meals people won't eat: the seller lists the meal's forget code, the buyer pays card to card, and the code is handed over once. The server keeps only a keyed hash of each student number, and the seller's card encrypted.",
+    ],
+    stack: ["Kotlin", "Jetpack Compose", "Ktor", "SQLite", "Firebase Cloud Messaging", "nginx"],
+    // The app's repository is public; the server's is private.
+    links: [{ label: "GitHub", href: "https://github.com/Nisatech-org/shining-app" }],
+    visual: {
+      kind: "phones",
+      shots: [
+        {
+          src: "/images/shining-home.webp",
+          alt: "Shining's home screen in Persian, with sample data: the account's credit, four days reserved this week, and the list of reserved meals with a forget code beside one of them",
+          width: 461,
+          height: 1000,
+        },
+        {
+          src: "/images/shining-reserve.webp",
+          alt: "The reserve screen: a row of days from Saturday to Tuesday, and one cafeteria's lunch with a meal already reserved and buttons to reserve or remove the others",
+          width: 461,
+          height: 1000,
+        },
+        {
+          src: "/images/shining-daily-sale.webp",
+          alt: "The daily sale: today's foods with their prices and serving hours, each with a bar showing how many are sold, and one sold out",
+          width: 461,
+          height: 1000,
+        },
+      ],
+    },
+  },
+  {
     name: "Café Menu",
     kicker: "Ordering web app, frontend and API",
     badge: { label: "Live demo" },

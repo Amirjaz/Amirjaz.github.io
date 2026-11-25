@@ -80,6 +80,9 @@ html.js .a5-root .a5-preloader {
 @keyframes a5-pre-failsafe {
   to {
     visibility: hidden;
+    /* The first word sets visibility: visible on itself, which beats an inherited
+       hidden, so fade the whole layer too or that word stays on screen. */
+    opacity: 0;
   }
 }
 .a5-root .a5-preloader-svg {

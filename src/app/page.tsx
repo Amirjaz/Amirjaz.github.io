@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { media } from "@/content/media";
+import { placeholders } from "@/content/placeholders";
 import { education, experience, projects, site, skills, type Project } from "@/content/site";
 import { Motion } from "./motion";
 import "./page.css";
@@ -24,13 +25,21 @@ function Isolated({ text }: { text: string }) {
   );
 }
 
-const greetings: { word: string; fa?: boolean }[] = [
-  { word: "Hello" },
-  { word: "سلام", fa: true },
-  { word: "Bonjour" },
-  { word: "Hallo" },
-  { word: "Ciao" },
-];
+/**
+ * The blurred preview behind an image until the image itself arrives. The previews are made by
+ * scripts/placeholders.mjs and are about a kilobyte each, inlined in the page.
+ */
+function blur(src: string): { style?: CSSProperties; "data-blur"?: "" } {
+  const background = placeholders[src];
+  return background ? { style: { backgroundImage: background }, "data-blur": "" } : {};
+}
+
+// Marks each image once it has loaded, so its blur can clear. It runs as the page is parsed,
+// not with the scripts, so a slow script download can never leave an image blurred.
+const markLoaded =
+  'document.querySelectorAll("img[data-blur]").forEach(function(i){' +
+  'function d(){i.setAttribute("data-loaded","")}' +
+  'if(i.complete){d()}else{i.addEventListener("load",d);i.addEventListener("error",d)}})';
 
 // Deterministic bar heights for the SinGo panel (no randomness, so server and client agree).
 const bars = Array.from({ length: 22 }, (_, i) => 0.28 + (((i * 37) % 100) / 100) * 0.62);
@@ -44,6 +53,7 @@ function ProjectPanel({ project, eager = false }: { project: Project; eager?: bo
         <div className="a5-panel a5-panel-cover">
           <img
             src={media.letterboxd[0]}
+            {...blur(media.letterboxd[0])}
             alt={project.visual.kind === "image" ? project.visual.alt : "Letterboxd Toolkit"}
             width={1280}
             height={800}
@@ -58,6 +68,7 @@ function ProjectPanel({ project, eager = false }: { project: Project; eager?: bo
         <div className="a5-panel a5-panel-duo">
           <img
             src={media.shamsi.light}
+            {...blur(media.shamsi.light)}
             alt={project.visual.kind === "image" ? project.visual.alt : "Shamsi-Calendar date picker"}
             width={344}
             height={462}
@@ -66,6 +77,7 @@ function ProjectPanel({ project, eager = false }: { project: Project; eager?: bo
           />
           <img
             src={media.persianUi[0]}
+            {...blur(media.persianUi[0])}
             alt="persian-ui form inputs: a national ID field with a validation error, a mobile number, a Sheba number and a price field with a toman and rial switch"
             width={784}
             height={828}
@@ -112,6 +124,7 @@ function ProjectPanel({ project, eager = false }: { project: Project; eager?: bo
               <img
                 key={shot.src}
                 src={shot.src}
+                {...blur(shot.src)}
                 alt={shot.alt}
                 width={shot.width}
                 height={shot.height}
@@ -125,7 +138,7 @@ function ProjectPanel({ project, eager = false }: { project: Project; eager?: bo
       if (visual.kind === "image") {
         return (
           <div className="a5-panel a5-panel-contain">
-            <img src={visual.src} alt={visual.alt} width={visual.width} height={visual.height} loading={loading} decoding="async" />
+            <img src={visual.src} {...blur(visual.src)} alt={visual.alt} width={visual.width} height={visual.height} loading={loading} decoding="async" />
           </div>
         );
       }
@@ -186,24 +199,8 @@ export default function Page() {
 
   return (
     <div className="a5-root">
-      <div className="a5-preloader" aria-hidden="true">
-        <svg className="a5-preloader-svg">
-          <path />
-        </svg>
-        <p className="a5-preloader-words">
-          {greetings.map((g) => (
-            <span key={g.word} data-word>
-              {g.fa ? (
-                <bdi lang="fa" dir="rtl" className="a5-fa">
-                  {g.word}
-                </bdi>
-              ) : (
-                g.word
-              )}
-            </span>
-          ))}
-        </p>
-      </div>
+      {/* A hairline in the accent colour that fills as the page loads. Only the script shows it. */}
+      <div className="a5-loadbar" aria-hidden="true" />
 
       <header className="a5-hero a5-dark">
         <nav className="a5-nav" aria-label="Sections" data-hero-in>
@@ -261,7 +258,8 @@ export default function Page() {
           <div className="a5-marquee-track">
             {[0, 1, 2, 3].map((i) => (
               <span className="a5-marquee-item" key={i}>
-                {name}
+                {/* Its own box, so the spaces survive when the intro splits it into words. */}
+                <span className="a5-marquee-name">{name}</span>
                 <i />
               </span>
             ))}
@@ -480,6 +478,7 @@ export default function Page() {
         </div>
       </footer>
 
+      <script dangerouslySetInnerHTML={{ __html: markLoaded }} />
       <Motion />
     </div>
   );

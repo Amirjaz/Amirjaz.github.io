@@ -37,6 +37,9 @@ To add a project, add one entry to `projects`. They are shown in the order they 
 Each needs a `visual`, which decides the picture beside the text:
 
 - `image`: one picture. Put a WebP around 1280px wide in `public/images/`.
+
+After adding or replacing an image, run `npm run placeholders` to remake the blurred previews
+in `src/content/placeholders.ts`.
 - `phones`: up to three phone-sized screenshots in a row, each a WebP 600px wide.
 - `terminal`: a short command-line session set in type, for tools with no interface.
 - `pipeline`: a row of labelled steps.
@@ -109,8 +112,14 @@ canonical link, sitemap, robots.txt and structured data all read it.
   (`#d43c12`). The palette is fixed and does not follow the system theme.
 - Hairline borders and small radii. No gradients, glows or heavy shadows.
 - The page is plain server-rendered HTML. `motion.tsx` only adds behaviour on top: smooth
-  scrolling, the preloader, text that rises in line by line, and blocks that drift with the
+  scrolling, the intro, text that rises in line by line, and blocks that drift with the
   scroll. With JavaScript off, everything is simply there.
-- `prefers-reduced-motion` skips the preloader and all of that motion.
+- The intro has no curtain. The giant name rises out of its line word by word and the rest of
+  the hero settles in, while a 2px accent line at the top fills until the page has loaded. If
+  the scripts take longer than 2 seconds, the hero comes in by itself, so a slow connection
+  never leaves it blank.
+- Every image has a blurred preview of about a kilobyte inlined as its background, which
+  clears once the picture arrives. The images below the hero load lazily.
+- `prefers-reduced-motion` skips the intro and all of that motion.
 - The class names start with `a5-` because this design was candidate A5 of four. The other
   three are in the first commit of this repository.

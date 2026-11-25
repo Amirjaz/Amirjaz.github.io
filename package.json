@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "preview": "npx --yes serve@14 out",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "placeholders": "node scripts/placeholders.mjs"
   },
   "dependencies": {
     "@fontsource-variable/vazirmatn": "^5.3.0",

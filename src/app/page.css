@@ -62,66 +62,47 @@ body:has(.a5-root) {
   color: var(--on-ink-muted);
 }
 
-/* ---------- Preloader ---------- */
-.a5-root .a5-preloader {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  place-items: center;
-  background: var(--ink);
-  color: var(--on-ink);
-  /* If the scripts never arrive, get out of the way on our own. */
-  animation: a5-pre-failsafe 0s linear 7s forwards;
+/* ---------- Intro: the hero builds itself ---------- */
+/* With scripts on, the hero waits for motion.tsx to bring it in. If the scripts are slow, it
+   comes in on its own after 2 seconds, so a slow connection never leaves it blank. */
+html.js .a5-root [data-hero-in] {
+  opacity: 0;
+  animation: a5-hero-failsafe 0.8s var(--ease) 2s forwards;
 }
-html.js .a5-root .a5-preloader {
-  display: grid;
-}
-@keyframes a5-pre-failsafe {
+@keyframes a5-hero-failsafe {
   to {
-    visibility: hidden;
-    /* The first word sets visibility: visible on itself, which beats an inherited
-       hidden, so fade the whole layer too or that word stays on screen. */
-    opacity: 0;
+    opacity: 1;
   }
 }
-.a5-root .a5-preloader-svg {
-  position: absolute;
+.a5-root .a5-loadbar {
+  position: fixed;
   top: 0;
   left: 0;
+  z-index: 95;
   width: 100%;
-  height: calc(100% + 300px);
-  fill: var(--ink);
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
   pointer-events: none;
 }
-.a5-root .a5-preloader-words {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  margin: 0;
-  font-size: clamp(2rem, 4.2vw, 3.25rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+
+/* ---------- Images: a blurred preview until the picture arrives ---------- */
+/* The preview is the image's own background (see blur() in page.tsx). Once the image has
+   loaded, the inline script in page.tsx marks it and the blur clears. */
+.a5-root img[data-blur] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  clip-path: inset(0 round 6px);
+  transition: filter 0.7s var(--ease);
 }
-.a5-root .a5-preloader-words > span {
-  grid-area: 1 / 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45em;
-  visibility: hidden;
+.a5-root .a5-panel-cover img[data-blur] {
+  clip-path: inset(0);
 }
-.a5-root .a5-preloader-words > span:first-child {
-  visibility: visible;
-}
-.a5-root .a5-preloader-words > span::before {
-  content: "";
-  width: 0.24em;
-  height: 0.24em;
-  border-radius: 50%;
-  background: var(--on-ink);
+html.js .a5-root img[data-blur]:not([data-loaded]) {
+  filter: blur(10px);
 }
 
 /* ---------- Hero ---------- */
@@ -937,10 +918,13 @@ html.js .a5-root .a5-preloader {
   }
 }
 
-/* ---------- Reduced motion: no preloader, nothing drifts ---------- */
+/* ---------- Reduced motion: no intro, nothing drifts ---------- */
 @media (prefers-reduced-motion: reduce) {
-  html.js .a5-root .a5-preloader,
-  .a5-root .a5-preloader {
+  html.js .a5-root [data-hero-in] {
+    opacity: 1;
+    animation: none;
+  }
+  .a5-root .a5-loadbar {
     display: none;
   }
   .a5-root .a5-globe ellipse,

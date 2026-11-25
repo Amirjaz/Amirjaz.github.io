@@ -71,43 +71,50 @@ export function Motion() {
     });
 
     const ctx = gsap.context(() => {
-      // ---------- Preloader, then the hero settles in ----------
-      const pre = $(".a5-preloader");
+      // ---------- Intro: the hero builds itself ----------
+      // The giant name rises out of its line word by word, then the nav and the copy settle in.
+      // It plays only if the scripts arrived before the CSS failsafe (page.css) started fading the
+      // hero in on its own. Later than that, replaying it would hide what is already on screen.
       const heroIn = $$("[data-hero-in]");
-      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const failsafe = heroIn[0]
+        ?.getAnimations?.()
+        .find((a) => (a as CSSAnimation).animationName === "a5-hero-failsafe");
+      const failsafeAt = Number(failsafe?.currentTime ?? Infinity);
+      if (heroIn.length && failsafeAt < 1800) {
+        const marquee = $(".a5-marquee");
+        const rest = heroIn.filter((el) => el !== marquee);
+        gsap.set(heroIn, { animation: "none" });
+        gsap.set(rest, { autoAlpha: 0, y: 26 });
 
-      const preStyle = pre ? getComputedStyle(pre) : null;
-      if (pre && preStyle && preStyle.display !== "none" && preStyle.visibility === "hidden") {
-        // The scripts came after the CSS failsafe had already put the preloader away
-        // (a slow connection). Playing it now would cover a page that is already showing.
-        gsap.set(pre, { display: "none" });
-      } else if (pre && preStyle && preStyle.display !== "none") {
-        const words = $$("[data-word]");
-        const path = pre.querySelector("path");
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const bulged = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h + 300} 0 ${h} L0 0`;
-        const flat = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h} 0 ${h} L0 0`;
+        const intro = gsap.timeline();
+        if (marquee) {
+          const split = SplitText.create(marquee.querySelectorAll(".a5-marquee-name"), { type: "words" });
+          // Words and the accent dots between them, in reading order.
+          const pieces = Array.from(marquee.querySelectorAll<HTMLElement>(".a5-marquee-name > div, .a5-marquee-item > i"));
+          const lift = (marquee.querySelector<HTMLElement>(".a5-marquee-item")?.offsetHeight ?? 200) * 1.05;
+          gsap.set(marquee, { autoAlpha: 1 });
+          intro.from(pieces, { y: lift, duration: 1.15, ease: "power4.out", stagger: 0.07, onComplete: () => split.revert() });
+        }
+        intro.to(rest, { autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.08 }, 0.3);
+      }
 
-        lenis.stop();
-        window.scrollTo(0, 0);
-        gsap.set(pre, { animation: "none" });
-        gsap.set(path, { attr: { d: bulged } });
-        gsap.set(heroIn, { y: 70, autoAlpha: 0 });
-
-        intro.fromTo(words[0], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45, ease: "power1.out" }).to({}, { duration: 0.5 });
-        words.slice(1).forEach((word, i) => {
-          intro.set(words[i], { autoAlpha: 0 }).set(word, { autoAlpha: 1 }).to({}, { duration: 0.19 });
-        });
-        intro
-          .to({}, { duration: 0.25 })
-          .set(pre, { backgroundColor: "transparent" })
-          .to(".a5-preloader-words", { autoAlpha: 0, y: -40, duration: 0.45, ease: "power2.in" })
-          .to(pre, { y: () => -(window.innerHeight + 40), duration: 0.95, ease: "power4.inOut" }, "<0.05")
-          .to(path, { attr: { d: flat }, duration: 0.8, ease: "power4.inOut" }, "<0.12")
-          .add(() => lenis.start(), "<0.3")
-          .to(heroIn, { y: 0, autoAlpha: 1, duration: 1.2, stagger: 0.09 }, "<")
-          .set(pre, { display: "none" });
+      // ---------- Load line: fills while the page is still loading, then fades ----------
+      const bar = $(".a5-loadbar");
+      if (bar && document.readyState !== "complete") {
+        gsap.set(bar, { autoAlpha: 1, scaleX: 0 });
+        const creep = gsap.to(bar, { scaleX: 0.85, duration: 6, ease: "power3.out" });
+        on(
+          window,
+          "load",
+          () => {
+            creep.kill();
+            gsap
+              .timeline()
+              .to(bar, { scaleX: 1, duration: 0.3, ease: "power2.out" })
+              .to(bar, { autoAlpha: 0, duration: 0.45, ease: "power1.out" });
+          },
+          { once: true },
+        );
       }
 
       // ---------- Name marquee: drifts, and turns around with the scroll ----------
